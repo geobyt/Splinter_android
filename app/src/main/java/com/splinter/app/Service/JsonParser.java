@@ -33,6 +33,7 @@ public class JsonParser {
                 JSONObject location = (JSONObject) iterator.next();
 
                 String locationId = (String) location.get("RowKey");
+                String description = (String) location.get("description");
                 Double latitude = (Double) location.get("lat");
                 Double longitude = (Double) location.get("long");
 
@@ -42,6 +43,7 @@ public class JsonParser {
                         latitude.toString(),
                         longitude.toString(),
                         0,
+                        description,
                         ""
                 );
 

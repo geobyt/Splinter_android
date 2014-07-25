@@ -1,8 +1,5 @@
 package com.splinter.app;
 
-import android.app.Dialog;
-import android.content.IntentSender;
-import android.graphics.Color;
 import android.location.Location;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -12,16 +9,17 @@ import android.view.MenuItem;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.splinter.app.Database.Coordinate;
 import com.splinter.app.Database.DBAdapter;
 import com.splinter.app.Service.JsonParser;
@@ -29,9 +27,6 @@ import com.splinter.app.Service.WebServiceListener;
 import com.splinter.app.Service.WebServiceTask;
 import com.google.android.gms.location.LocationListener;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
 
 import java.util.List;
@@ -116,7 +111,14 @@ public class MainActivity
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
 
         this.MoveToCoordinate(new LatLng(location.getLatitude(), location.getLongitude()));
-        this.DrawLocationOnMap(new LatLng(location.getLatitude(), location.getLongitude()), Color.RED, 100);
+        this.DrawLocationOnMap(new LatLng(location.getLatitude(), location.getLongitude()),
+                BitmapDescriptorFactory.fromResource(R.drawable.map_marker_red),
+                "my location");
+
+        //get current location only once
+        if (mLocationClient.isConnected()) {
+            mLocationClient.removeLocationUpdates(this);
+        }
     }
 
     @Override
@@ -191,7 +193,9 @@ public class MainActivity
 
             if (coordinates != null){
                 for (Coordinate c : coordinates){
-                    this.DrawLocationOnMap(new LatLng(Double.parseDouble(c.getLatitude()), Double.parseDouble(c.getLongitude())), Color.BLUE, 50);
+                    this.DrawLocationOnMap(new LatLng(Double.parseDouble(c.getLatitude()), Double.parseDouble(c.getLongitude())),
+                            BitmapDescriptorFactory.fromResource(R.drawable.map_marker_blue),
+                            c.getDescription());
                 }
             }
         }
@@ -206,12 +210,17 @@ public class MainActivity
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(myCoordinate));
     }
 
-    void DrawLocationOnMap(LatLng location, int color, int size){
-        CircleOptions circleOptions = new CircleOptions()
+    void DrawLocationOnMap(LatLng location, BitmapDescriptor image, String title){
+        /*CircleOptions circleOptions = new CircleOptions()
                 .center(location)
                 .fillColor(color)
                 .radius(size); // In meters
 
-        Circle circle = mMap.addCircle(circleOptions);
+        Circle circle = mMap.addCircle(circleOptions);*/
+
+        Marker marker = mMap.addMarker(new MarkerOptions()
+                .position(location)
+                .title(title)
+                .icon(image));
     }
 }

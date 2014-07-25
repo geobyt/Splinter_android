@@ -22,6 +22,7 @@ public class DBAdapter {
     public static final String KEY_LONGITUDE = "longitude";
     public static final String KEY_COUNT = "count";
     public static final String KEY_DATE = "date";
+    public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_ROWID = "_id";
 
     private static final String TAG = "DBAdapter";
@@ -37,6 +38,7 @@ public class DBAdapter {
                     + "latitude text null, "
                     + "longitude text null, "
                     + "count integer null, "
+                    + "description text null, "
                     + "date text null"
                     + ");";
 
@@ -86,6 +88,7 @@ public class DBAdapter {
         initialValues.put(KEY_LATITUDE, coordinate.latitude);
         initialValues.put(KEY_LONGITUDE, coordinate.longitude);
         initialValues.put(KEY_COUNT, coordinate.count);
+        initialValues.put(KEY_DESCRIPTION, coordinate.description);
         initialValues.put(KEY_DATE, coordinate.date);
 
         return mDb.insert(DATABASE_TABLE, null, initialValues);
@@ -106,6 +109,7 @@ public class DBAdapter {
                     KEY_LATITUDE,
                     KEY_LONGITUDE,
                     KEY_COUNT,
+                    KEY_DESCRIPTION,
                     KEY_DATE
             }, null, null, null, null, null);
 
@@ -117,7 +121,8 @@ public class DBAdapter {
                         mCursor.getString(2),
                         mCursor.getString(3),
                         Integer.parseInt(mCursor.getString(4)),
-                        mCursor.getString(5)
+                        mCursor.getString(5),
+                        mCursor.getString(6)
                 );
 
                 coordinates.add(coordinate);
@@ -135,6 +140,7 @@ public class DBAdapter {
                     KEY_LATITUDE,
                     KEY_LONGITUDE,
                     KEY_COUNT,
+                    KEY_DESCRIPTION,
                     KEY_DATE
             }, KEY_ROWID + "=" + rowId, null, null, null, null, null);
 
@@ -148,7 +154,8 @@ public class DBAdapter {
                 mCursor.getString(2),
                 mCursor.getString(3),
                 Integer.parseInt(mCursor.getString(4)),
-                mCursor.getString(5)
+                mCursor.getString(5),
+                mCursor.getString(6)
             );
 
         return coordinate;
@@ -160,6 +167,7 @@ public class DBAdapter {
         args.put(KEY_LATITUDE, coordinate.latitude);
         args.put(KEY_LONGITUDE, coordinate.longitude);
         args.put(KEY_COUNT, coordinate.count);
+        args.put(KEY_DESCRIPTION, coordinate.description);
         args.put(KEY_DATE, coordinate.date);
 
         return mDb.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;

@@ -10,6 +10,7 @@ public class Coordinate {
     String latitude;
     String longitude;
     int count;
+    String description;
     String date;
 
     public Coordinate(){
@@ -17,12 +18,13 @@ public class Coordinate {
     }
 
     public Coordinate(int id, String locationId, String latitude, String longitude,
-                      int count, String date){
+                      int count, String description, String date){
         this.id = id;
         this.locationId = locationId;
         this.latitude= latitude;
         this.longitude = longitude;
         this.count = count;
+        this.description = description;
         this.date = date;
     }
 
@@ -64,6 +66,14 @@ public class Coordinate {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getDate() {
