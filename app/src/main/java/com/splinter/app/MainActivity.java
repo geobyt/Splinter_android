@@ -260,7 +260,7 @@ public class MainActivity
 
         this.MoveToCoordinate(new LatLng(location.getLatitude(), location.getLongitude()));
         this.DrawLocationOnMap(new LatLng(location.getLatitude(), location.getLongitude()),
-                BitmapDescriptorFactory.fromResource(R.drawable.map_marker_red),
+                BitmapDescriptorFactory.fromResource(R.drawable.map_marker_red2),
                 "my location");
 
         //get current location only once
@@ -379,7 +379,7 @@ public class MainActivity
                     c.setLongitude("-122.201161");
 
                     this.DrawLocationOnMap(new LatLng(Double.parseDouble(c.getLatitude()), Double.parseDouble(c.getLongitude())),
-                            BitmapDescriptorFactory.fromResource(R.drawable.map_marker_blue),
+                            BitmapDescriptorFactory.fromResource(R.drawable.map_marker_blue2),
                             c.getDescription());
 
                     //try to register the coordinate for geofencing
