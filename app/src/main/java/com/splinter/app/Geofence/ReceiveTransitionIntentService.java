@@ -2,6 +2,8 @@ package com.splinter.app.Geofence;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationClient;
+import com.splinter.app.Geofence.GeofenceUtils;
+import com.splinter.app.Geofence.LocationServiceErrorMessages;
 import com.splinter.app.MainActivity;
 import com.splinter.app.R;
 
@@ -39,6 +41,8 @@ public class ReceiveTransitionIntentService extends IntentService {
      */
     @Override
     protected void onHandleIntent(Intent intent) {
+
+        Log.d(GeofenceUtils.APPTAG, "inside onHandleIntent");
 
         // Create a local broadcast Intent
         Intent broadcastIntent = new Intent();

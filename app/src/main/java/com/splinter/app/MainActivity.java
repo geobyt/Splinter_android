@@ -375,8 +375,8 @@ public class MainActivity
             if (coordinates != null){
                 for (Coordinate c : coordinates){
                     //HACK: change coordinate to art museum
-                    c.setLatitude("47.615371");
-                    c.setLongitude("-122.201161");
+                    c.setLatitude("47.61698914");
+                    c.setLongitude("-122.20091248");
 
                     this.DrawLocationOnMap(new LatLng(Double.parseDouble(c.getLatitude()), Double.parseDouble(c.getLongitude())),
                             BitmapDescriptorFactory.fromResource(R.drawable.map_marker_blue2),
@@ -396,7 +396,7 @@ public class MainActivity
                             Double.parseDouble(c.getLongitude()),
                             1000,
                             Double.valueOf(GEOFENCE_EXPIRATION_IN_MILLISECONDS).longValue(),
-                            Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT
+                            Geofence.GEOFENCE_TRANSITION_ENTER
                     );
 
                     AddGeofence(geofence);
