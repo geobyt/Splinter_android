@@ -370,7 +370,7 @@ public class MainActivity
     public void response(String result){
         //TODO: actually update database here
         if (!result.isEmpty()) {
-            List<Coordinate> coordinates = JsonParser.ParseJson(result);
+            List<Coordinate> coordinates = JsonParser.ParseLocationsJson(result);
 
             if (coordinates != null){
                 for (Coordinate c : coordinates){

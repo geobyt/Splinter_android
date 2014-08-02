@@ -4,7 +4,7 @@ import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationClient;
 import com.splinter.app.Geofence.GeofenceUtils;
 import com.splinter.app.Geofence.LocationServiceErrorMessages;
-import com.splinter.app.MainActivity;
+import com.splinter.app.MessagesActivity;
 import com.splinter.app.R;
 
 import android.app.IntentService;
@@ -123,13 +123,15 @@ public class ReceiveTransitionIntentService extends IntentService {
 
         // Create an explicit content Intent that starts the main Activity
         Intent notificationIntent =
-                new Intent(getApplicationContext(), MainActivity.class);
+                new Intent(getApplicationContext(), MessagesActivity.class);
+
+        notificationIntent.putExtra("LOCATION_ID", ids);
 
         // Construct a task stack
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
 
         // Adds the main Activity to the task stack as the parent
-        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addParentStack(MessagesActivity.class);
 
         // Push the content Intent onto the stack
         stackBuilder.addNextIntent(notificationIntent);
