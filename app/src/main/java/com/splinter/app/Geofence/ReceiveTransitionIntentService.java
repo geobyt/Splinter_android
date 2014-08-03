@@ -2,8 +2,6 @@ package com.splinter.app.Geofence;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationClient;
-import com.splinter.app.Geofence.GeofenceUtils;
-import com.splinter.app.Geofence.LocationServiceErrorMessages;
 import com.splinter.app.MessagesActivity;
 import com.splinter.app.R;
 
@@ -12,11 +10,13 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -27,11 +27,19 @@ import java.util.List;
  */
 public class ReceiveTransitionIntentService extends IntentService {
 
+    private Handler handler;
+
     /**
      * Sets an identifier for this class' background thread
      */
     public ReceiveTransitionIntentService() {
         super("ReceiveTransitionIntentService");
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        this.handler = new Handler();
     }
 
     /**
@@ -41,6 +49,12 @@ public class ReceiveTransitionIntentService extends IntentService {
      */
     @Override
     protected void onHandleIntent(Intent intent) {
+        this.handler.post(new Runnable() {
+            public void run() {
+                Toast toast = Toast.makeText(ReceiveTransitionIntentService.this, "Messages in Splinter App!", Toast.LENGTH_LONG);
+                toast.show();
+            }
+        });
 
         Log.d(GeofenceUtils.APPTAG, "inside onHandleIntent");
 
