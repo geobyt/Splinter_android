@@ -375,8 +375,8 @@ public class MainActivity
             if (coordinates != null){
                 for (Coordinate c : coordinates){
                     //HACK: change coordinate to art museum
-                    c.setLatitude("47.61698914");
-                    c.setLongitude("-122.20091248");
+                    //c.setLatitude("47.61698914");
+                    //c.setLongitude("-122.20091248");
 
                     this.DrawLocationOnMap(new LatLng(Double.parseDouble(c.getLatitude()), Double.parseDouble(c.getLongitude())),
                             BitmapDescriptorFactory.fromResource(R.drawable.map_marker_blue2),

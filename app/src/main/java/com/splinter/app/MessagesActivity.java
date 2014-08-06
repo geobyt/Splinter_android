@@ -1,24 +1,43 @@
 package com.splinter.app;
 
+import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.splinter.app.Database.Message;
 import com.splinter.app.Service.JsonParser;
 import com.splinter.app.Service.WebServiceListener;
+import com.splinter.app.Service.WebServicePostTask;
 import com.splinter.app.Service.WebServiceTask;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.simple.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class MessagesActivity extends ListActivity implements WebServiceListener {
+public class MessagesActivity extends ListActivity implements WebServiceListener, AddMessage.AddMessageListener {
 
     WebServiceTask webServiceTask = new WebServiceTask();
+    WebServicePostTask webServicePostTask = new WebServicePostTask();
+
+    String locationId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +46,12 @@ public class MessagesActivity extends ListActivity implements WebServiceListener
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            String locationId = extras.getString("LOCATION_ID");
+            locationId = extras.getString("LOCATION_ID");
             this.webServiceTask.execute("http://lyraserver.azurewebsites.net/message/" + locationId);
+        }
+        else
+        {
+            this.webServiceTask.execute("http://lyraserver.azurewebsites.net/message/2");
         }
     }
 
@@ -54,4 +77,45 @@ public class MessagesActivity extends ListActivity implements WebServiceListener
             setListAdapter(adapter);
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.messages, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_addmessage) {
+            showAddMessageDialog();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void showAddMessageDialog() {
+        DialogFragment dialog = new AddMessage();
+        dialog.show(this.getFragmentManager(), "AddMessage");
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        String message = ((AddMessage)dialog).messageText.getText().toString();
+        JSONObject obj = new JSONObject();
+        obj.put("location_id", Integer.valueOf(locationId));
+        obj.put("text", message);
+
+        new WebServicePostTask().execute("http://lyraserver.azurewebsites.net/locations/" + locationId, obj.toJSONString());
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+    }
+
 }

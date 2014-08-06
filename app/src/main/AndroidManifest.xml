@@ -35,10 +35,7 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyCLW2ftzcDy9lkPKDQoyklfP8ru1iXzL5k" />
 
-        <activity
-            android:name="com.splinter.app.MessagesActivity"
-            android:label="@string/title_activity_messages" >
-        </activity>
+
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
