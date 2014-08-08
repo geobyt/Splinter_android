@@ -34,24 +34,22 @@ import java.util.List;
 
 public class MessagesActivity extends ListActivity implements WebServiceListener, AddMessage.AddMessageListener {
 
-    WebServiceTask webServiceTask = new WebServiceTask();
-    WebServicePostTask webServicePostTask = new WebServicePostTask();
-
     String locationId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        WebServiceTask webServiceTask = new WebServiceTask();
         webServiceTask.delegate = this;
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             locationId = extras.getString("LOCATION_ID");
-            this.webServiceTask.execute("http://lyraserver.azurewebsites.net/message/" + locationId);
+            webServiceTask.execute("http://lyraserver.azurewebsites.net/message/" + locationId);
         }
         else
         {
-            this.webServiceTask.execute("http://lyraserver.azurewebsites.net/message/2");
+            webServiceTask.execute("http://lyraserver.azurewebsites.net/message/2");
         }
     }
 
@@ -61,7 +59,13 @@ public class MessagesActivity extends ListActivity implements WebServiceListener
         Toast.makeText(this, item + " selected", Toast.LENGTH_LONG).show();
     }
 
-    public void response(String result) {
+    public void responsePost(String result){
+        WebServiceTask webServiceTask = new WebServiceTask();
+        webServiceTask.delegate = this;
+        webServiceTask.execute("http://lyraserver.azurewebsites.net/message/" + locationId);
+    }
+
+    public void responseGet(String result) {
         //TODO: actually update database here
         if (!result.isEmpty()) {
             List<Message> messages = JsonParser.ParseMessagesJson(result);
@@ -106,12 +110,13 @@ public class MessagesActivity extends ListActivity implements WebServiceListener
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
+        WebServicePostTask webServicePostTask = new WebServicePostTask();
+        webServicePostTask.delegate = this;
+
         String message = ((AddMessage)dialog).messageText.getText().toString();
         JSONObject obj = new JSONObject();
-        obj.put("location_id", Integer.valueOf(locationId));
         obj.put("text", message);
-
-        new WebServicePostTask().execute("http://lyraserver.azurewebsites.net/locations/" + locationId, obj.toJSONString());
+        webServicePostTask.execute("http://lyraserver.azurewebsites.net/message/" + locationId, obj.toJSONString());
     }
 
     @Override

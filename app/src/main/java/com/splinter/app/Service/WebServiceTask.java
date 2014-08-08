@@ -60,6 +60,6 @@ public class WebServiceTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        delegate.response(result);
+        delegate.responseGet(result);
     }
 }

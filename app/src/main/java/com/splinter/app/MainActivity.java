@@ -367,7 +367,11 @@ public class MainActivity
         }
     }
 
-    public void response(String result){
+    public void responsePost(String result){
+
+    }
+
+    public void responseGet(String result){
         //TODO: actually update database here
         if (!result.isEmpty()) {
             List<Coordinate> coordinates = JsonParser.ParseLocationsJson(result);
