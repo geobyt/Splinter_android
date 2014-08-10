@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.splinter.app.Database.Message;
@@ -19,12 +21,6 @@ import com.splinter.app.Service.WebServiceListener;
 import com.splinter.app.Service.WebServicePostTask;
 import com.splinter.app.Service.WebServiceTask;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -32,13 +28,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MessagesActivity extends ListActivity implements WebServiceListener, AddMessage.AddMessageListener {
+public class MessagesActivity
+        extends ListActivity
+        implements WebServiceListener, AddMessage.AddMessageListener, SwipeRefreshLayout.OnRefreshListener {
 
     String locationId;
+    SwipeRefreshLayout swipeLayout;
+    TextView loadingText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_messages);
+
+        loadingText = (TextView) findViewById(R.id.loading_text);
+
+        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(this);
+        swipeLayout.setColorScheme(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+        swipeLayout.setRefreshing(true);
+        loadingText.setVisibility(View.VISIBLE);
+
         WebServiceTask webServiceTask = new WebServiceTask();
         webServiceTask.delegate = this;
 
@@ -54,18 +68,24 @@ public class MessagesActivity extends ListActivity implements WebServiceListener
     }
 
     @Override
+    public void onRefresh() {
+        refreshList();
+    }
+
+    @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         String item = (String) getListAdapter().getItem(position);
         Toast.makeText(this, item + " selected", Toast.LENGTH_LONG).show();
     }
 
     public void responsePost(String result){
-        WebServiceTask webServiceTask = new WebServiceTask();
-        webServiceTask.delegate = this;
-        webServiceTask.execute("http://lyraserver.azurewebsites.net/message/" + locationId);
+        refreshList();
     }
 
     public void responseGet(String result) {
+        swipeLayout.setRefreshing(false);
+        loadingText.setVisibility(View.GONE);
+
         //TODO: actually update database here
         if (!result.isEmpty()) {
             List<Message> messages = JsonParser.ParseMessagesJson(result);
@@ -121,6 +141,12 @@ public class MessagesActivity extends ListActivity implements WebServiceListener
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
+    }
+
+    private void refreshList(){
+        WebServiceTask webServiceTask = new WebServiceTask();
+        webServiceTask.delegate = this;
+        webServiceTask.execute("http://lyraserver.azurewebsites.net/message/" + locationId);
     }
 
 }

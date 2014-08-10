@@ -403,9 +403,13 @@ public class MainActivity
                             Geofence.GEOFENCE_TRANSITION_ENTER
                     );
 
-                    AddGeofence(geofence);
+                    //save to db
+                    mDbHelper.createGeofence(geofence);
 
+                    mCurrentGeofences.add(geofence.toGeofence());
                 }
+
+                AddGeofences();
             }
         }
     }
@@ -460,17 +464,12 @@ public class MainActivity
     }
 
     //GEOFENCE ADD
-    public void AddGeofence(SimpleGeofence geofence) {
+    public void AddGeofences() {
         mRequestType = GeofenceUtils.REQUEST_TYPE.ADD;
 
         if (!servicesConnected()) {
             return;
         }
-
-        //save to db
-        mDbHelper.createGeofence(geofence);
-
-        mCurrentGeofences.add(geofence.toGeofence());
 
         // Start the request. Fail if there's already a request in progress
         try {
