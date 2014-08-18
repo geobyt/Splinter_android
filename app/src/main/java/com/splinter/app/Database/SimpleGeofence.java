@@ -8,7 +8,7 @@ import com.google.android.gms.location.Geofence;
  * Created by geo on 7/26/14.
  */
 public class SimpleGeofence {
-    private final int mId;
+    private final String mId;
     private final double mLatitude;
     private final double mLongitude;
     private final float mRadius;
@@ -25,7 +25,7 @@ public class SimpleGeofence {
      * @param transition Type of Geofence transition. The value is not checked for validity.
      */
     public SimpleGeofence(
-            int geofenceId,
+            String geofenceId,
             double latitude,
             double longitude,
             float radius,
@@ -40,7 +40,7 @@ public class SimpleGeofence {
         this.mTransitionType = transition;
     }
 
-    public int getId() {
+    public String getId() {
         return mId;
     }
 
@@ -68,7 +68,7 @@ public class SimpleGeofence {
         try {
             // Build a new Geofence object
             return new Geofence.Builder()
-                    .setRequestId(String.valueOf(getId()))
+                    .setRequestId(getId())
                     .setTransitionTypes(mTransitionType)
                     .setCircularRegion(
                             getLatitude(),

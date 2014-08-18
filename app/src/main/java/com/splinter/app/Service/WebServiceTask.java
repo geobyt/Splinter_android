@@ -34,7 +34,9 @@ public class WebServiceTask extends AsyncTask<String, Void, String> {
         String responseString = null;
 
         try {
-            response = httpclient.execute(new HttpGet(uri[0]));
+            HttpGet httpGet = new HttpGet(uri[0]);
+            httpGet.setHeader("Content-Type", "application/x-www-form-urlencoded");
+            response = httpclient.execute(httpGet);
             StatusLine statusLine = response.getStatusLine();
 
             if(statusLine.getStatusCode() == HttpStatus.SC_OK){

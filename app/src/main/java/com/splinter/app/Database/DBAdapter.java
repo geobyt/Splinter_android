@@ -207,7 +207,7 @@ public class DBAdapter {
 
     public boolean deleteGeofence(int id) {
 
-        return mDb.delete(DATABASE_TABLE_GEOFENCE, KEY_GEOFENCE_ID + "=" + id, null) > 0;
+        return mDb.delete(DATABASE_TABLE_GEOFENCE, KEY_GEOFENCE_ID + "='" + id + "'", null) > 0;
     }
 
     public List<SimpleGeofence> fetchAllGeofences() {
@@ -226,7 +226,7 @@ public class DBAdapter {
         if (mCursor.moveToFirst()) {
             do {
                 SimpleGeofence geofence = new SimpleGeofence(
-                        Integer.parseInt(mCursor.getString(0)),
+                        mCursor.getString(0),
                         Double.parseDouble(mCursor.getString(1)),
                         Double.parseDouble(mCursor.getString(2)),
                         Float.parseFloat(mCursor.getString(3)),
@@ -241,7 +241,7 @@ public class DBAdapter {
         return geofences;
     }
 
-    public SimpleGeofence fetchGeofence(int id) throws SQLException {
+    public SimpleGeofence fetchGeofence(String id) throws SQLException {
         Cursor mCursor =
                 mDb.query(true, DATABASE_TABLE_GEOFENCE, new String[] {
                         KEY_GEOFENCE_ID,
@@ -250,12 +250,12 @@ public class DBAdapter {
                         KEY_GEOFENCE_RADIUS,
                         KEY_GEOFENCE_EXPIRATION,
                         KEY_GEOFENCE_TRANSITION_TYPE
-                }, KEY_GEOFENCE_ID + "=" + id, null, null, null, null, null);
+                }, KEY_GEOFENCE_ID + "='" + id + "'", null, null, null, null, null);
 
         if (mCursor != null && mCursor.moveToFirst()) {
 
             SimpleGeofence geofence = new SimpleGeofence(
-                    Integer.parseInt(mCursor.getString(0)),
+                    mCursor.getString(0),
                     Double.parseDouble(mCursor.getString(1)),
                     Double.parseDouble(mCursor.getString(2)),
                     Float.parseFloat(mCursor.getString(3)),
@@ -278,6 +278,6 @@ public class DBAdapter {
         args.put(KEY_GEOFENCE_EXPIRATION, geofence.getExpirationDuration());
         args.put(KEY_GEOFENCE_TRANSITION_TYPE, geofence.getTransitionType());
 
-        return mDb.update(DATABASE_TABLE_GEOFENCE, args, KEY_GEOFENCE_ID + "=" + id, null) > 0;
+        return mDb.update(DATABASE_TABLE_GEOFENCE, args, KEY_GEOFENCE_ID + "='" + id + "'", null) > 0;
     }
 }

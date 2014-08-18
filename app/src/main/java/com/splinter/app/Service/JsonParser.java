@@ -33,7 +33,7 @@ public class JsonParser {
             while (iterator.hasNext()) {
                 JSONObject location = (JSONObject) iterator.next();
 
-                String locationId = (String) location.get("RowKey");
+                String locationId = (String) location.get("id");
                 String description = (String) location.get("description");
                 Double latitude = (Double) location.get("lat");
                 Double longitude = (Double) location.get("long");
@@ -73,7 +73,7 @@ public class JsonParser {
             while (iterator.hasNext()) {
                 JSONObject location = (JSONObject) iterator.next();
 
-                long locationId = (Long) location.get("location_id");
+                String locationId = (String) location.get("location_id");
                 String description = (String) location.get("text");
 
                 Message message = new Message(

@@ -387,7 +387,7 @@ public class MainActivity
                             c.getDescription());
 
                     //try to register the coordinate for geofencing
-                    SimpleGeofence geofence = mDbHelper.fetchGeofence(Integer.parseInt(c.getLocationId()));
+                    SimpleGeofence geofence = mDbHelper.fetchGeofence(c.getLocationId());
 
                     //if already registered - remove
                     if (geofence != null) {
@@ -395,7 +395,7 @@ public class MainActivity
                     }
 
                     geofence = new SimpleGeofence(
-                            Integer.parseInt(c.getLocationId()),
+                            c.getLocationId(),
                             Double.parseDouble(c.getLatitude()),
                             Double.parseDouble(c.getLongitude()),
                             1000,

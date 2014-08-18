@@ -6,14 +6,14 @@ package com.splinter.app.Database;
 public class Message {
     //private variables
     int id;
-    long locationId;
+    String locationId;
     String description;
 
     public Message(){
 
     }
 
-    public Message(int id, long locationId, String description){
+    public Message(int id, String locationId, String description){
         this.id = id;
         this.locationId = locationId;
         this.description = description;
@@ -27,11 +27,11 @@ public class Message {
         this.id = id;
     }
 
-    public long getLocationId() {
+    public String getLocationId() {
         return locationId;
     }
 
-    public void setLocationId(long locationId) {
+    public void setLocationId(String locationId) {
         this.locationId = locationId;
     }
 
